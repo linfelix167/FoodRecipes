@@ -14,7 +14,7 @@ public interface RecipeApi {
     Call<RecipeSearchResponse> searchRecipe(
             @Query("key") String key,
             @Query("q") String query,
-            @Query("page") int page
+            @Query("page") String page
     );
 
     // Get Recipe Request

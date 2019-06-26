@@ -14,6 +14,7 @@ import com.felix.foodrecipes.requests.ServiceGenerator;
 import com.felix.foodrecipes.requests.responses.RecipeResponse;
 import com.felix.foodrecipes.requests.responses.RecipeSearchResponse;
 import com.felix.foodrecipes.util.Constants;
+import com.felix.foodrecipes.util.Testing;
 import com.felix.foodrecipes.viewmodels.RecipeListViewModel;
 
 import java.io.IOException;
@@ -48,73 +49,18 @@ public class RecipeListActivity extends BaseActivity {
         mRecipeListViewModel.getRecipes().observe(this, new Observer<List<Recipe>>() {
             @Override
             public void onChanged(@Nullable List<Recipe> recipes) {
-
+                if (recipes != null) {
+                    Testing.printRecipe(recipes, TAG);
+                }
             }
         });
     }
 
+    public void searchRecipesApi(String query, int pageNumber) {
+        mRecipeListViewModel.searchRecipesApi(query, pageNumber);
+    }
+
     private void testRetrofitRequest() {
-        RecipeApi recipeApi = ServiceGenerator.getRecipeApi();
-
-//        Call<RecipeSearchResponse> responseCall = recipeApi
-////                .searchRecipe(
-////                        Constants.API_KEY,
-////                        "chicken breast",
-////                        1
-////                        );
-////
-////        responseCall.enqueue(new Callback<RecipeSearchResponse>() {
-////            @Override
-////            public void onResponse(Call<RecipeSearchResponse> call, Response<RecipeSearchResponse> response) {
-////                Log.d(TAG, "onResponse: " + response.toString());
-////                if (response.code() == 200) {
-////                    Log.d(TAG, "onResponse: " + response.body().toString());
-////                    List<Recipe> recipes = new ArrayList<>(response.body().getRecipes());
-////                    for (Recipe recipe : recipes) {
-////                        Log.d(TAG, "onResponse: " + recipe.getTitle());
-////                    }
-////                } else {
-////                    try {
-////                        Log.d(TAG, "onResponse: " + response.errorBody().string());
-////                    } catch (IOException e) {
-////                        e.printStackTrace();
-////                    }
-////                }
-////            }
-////
-////            @Override
-////            public void onFailure(Call<RecipeSearchResponse> call, Throwable t) {
-////
-////            }
-////        });
-
-        Call<RecipeResponse> responseCall = recipeApi
-                .getRecipe(
-                        Constants.API_KEY,
-                        "8c0314"
-                );
-
-        responseCall.enqueue(new Callback<RecipeResponse>() {
-            @Override
-            public void onResponse(Call<RecipeResponse> call, Response<RecipeResponse> response) {
-                Log.d(TAG, "onResponse: " + response.toString());
-                if (response.code() == 200) {
-                    Log.d(TAG, "onResponse: " + response.body().toString());
-                    Recipe recipe = response.body().getRecipe();
-                    Log.d(TAG, "onResponse: " + recipe.toString());
-                } else {
-                    try {
-                        Log.d(TAG, "onResponse: " + response.errorBody().string());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RecipeResponse> call, Throwable t) {
-
-            }
-        });
+        searchRecipesApi("chicken breast", 1);
     }
 }
